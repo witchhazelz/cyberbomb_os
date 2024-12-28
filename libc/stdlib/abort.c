@@ -1,15 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
 
 __attribute__((__noreturn__))
 void abort(void) {
 #if defined(__is_libk)
-	// TODO: Add proper kernel panic.
-	printf("kernel: panic: abort()\n");
+    // kernel panic
+    //  FUTURE TODO: Log the error, dump the state, and halt the system.
+    printf("kernel: panic: abort()\n");
+    // Maybe I can enter an infinite loop or halt the CPU.
+    while (1) { }
 #else
-	// TODO: Abnormally terminate the process as if by SIGABRT.
-	printf("abort()\n");
+    // Abnormally terminate the process as if by SIGABRT
+    // Raise the SIGABRT signal to terminate the process
+    raise(SIGABRT);
+    // If for some reason raise fails, we can call exit with a non-zero status.
+    _exit(1);
 #endif
-	while (1) { }
-	__builtin_unreachable();
+    // This point should never be reached.
+    __builtin_unreachable();
 }

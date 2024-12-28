@@ -4,5 +4,5 @@
 
 void kernel_main(void) {
 	terminal_initialize();
-	printf("'Sup kernel, I'm Cyberbomb!\n");
+	printf("'Bleh!\n");
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h> // Include for the write system call
 
 #if defined(__is_libk)
 #include <kernel/tty.h>
@@ -6,10 +7,13 @@
 
 int putchar(int ic) {
 #if defined(__is_libk)
-	char c = (char) ic;
-	terminal_write(&c, sizeof(c));
+    char c = (char) ic;
+    terminal_write(&c, sizeof(c));
 #else
-	// TODO: Implement stdio and the write system call.
+    // Add stdio and the write system call.
+    // The write system call takes three arguments: file descriptor, buffer, and count.
+    // STDOUT_FILENO is the file descriptor for standard output (typically 1).
+    return write(STDOUT_FILENO, &ic, 1) == 1 ? ic : EOF;
 #endif
-	return ic;
+    return ic;
 }
